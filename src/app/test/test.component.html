@@ -1,3 +1,4 @@
-<p>
-  test works!
-</p>
+<chart [options]="options" 
+        (load)="saveInstance($event.context)">
+</chart>
+<button (click)="getReport()"> Analysis</button>
