@@ -2,18 +2,19 @@ import { Component, OnInit } from '@angular/core';
 import {ReportService} from '../report/service/report.service';
 import { Http, Response } from '@angular/http';
 import { ChartModule } from 'angular2-highcharts'; 
+import {Router} from '@angular/router'
 
 @Component({
   selector: 'app-test',
   templateUrl: './test.component.html',
-  styleUrls: ['./test.component.css'],
+  styleUrls: ['../report/report.component.css'],
   providers: [ReportService]
 })
 export class TestComponent implements OnInit {
 
- constructor(private reportService : ReportService) { 
+ constructor(private router : Router, private reportService : ReportService) { 
     this.options = {
-          colors: ['#0f0', '#ff4141', '#7798BF', '#aaeeee', '#ff0066', '#eeaaee',
+          colors: ['#b30000', '#259C07', '#7798BF', '#aaeeee', '#ff0066', '#eeaaee',
                     '#55BF3B', '#DF5353', '#7798BF', '#aaeeee'],
            chart: {
              type: 'column',
@@ -27,10 +28,10 @@ export class TestComponent implements OnInit {
               style: {
                 fontFamily: '\'Unica One\', sans-serif'
               },
-              plotBorderColor: '#606063'
+             // plotBorderColor: '#606063'
             },
             title: {
-                text: 'Population Analysis in Cafe',
+                text: 'Population Analysis in Cafetaria',
                 style: {
                         color: '#E0E0E3',
                         textTransform: 'uppercase',
@@ -60,8 +61,8 @@ export class TestComponent implements OnInit {
                 },
                 lineColor: '#707073',
                 minorGridLineColor: '#505053',
-                tickColor: '#707073',
-                tickWidth: 1,
+               tickColor: '#707073',
+               tickWidth: 1,
                 title: {
                   text: 'Number Of Persons',
                   style: {
@@ -73,12 +74,17 @@ export class TestComponent implements OnInit {
             credits: {
                 enabled: false
             },
+            plotOptions: {
+                column: {
+                    stacking: 'normal',
+                }
+            },
             series: [{
                 name: 'Entered',
                 data: [5, 3, 4, 7, 2, 8, 3, 4, 2, 2]
             }, {
                 name: 'Exit',
-                data: [-2, -2, 0, -2, -1, -2, -1, -5, 0, -3]
+                data: [2, 2, 0, 2, 1, 2, 1, 5, 0, 3]
             }],
             legend: {
                 itemStyle: {
@@ -109,6 +115,10 @@ export class TestComponent implements OnInit {
         console.log(res);
       }
     );
+  }
+
+  showReport(){
+    this.router.navigate(['report']);
   }
 
 }

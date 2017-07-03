@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import {ReportService} from './service/report.service';
 import { Http, Response } from '@angular/http';
 import { ChartModule } from 'angular2-highcharts'; 
+import {Router} from '@angular/router'
 
 @Component({
   selector: 'app-report',
@@ -11,12 +12,11 @@ import { ChartModule } from 'angular2-highcharts';
 })
 export class ReportComponent implements OnInit {
 
-  constructor(private reportService : ReportService) { 
+  constructor(private router : Router, private reportService : ReportService) { 
     this.options = {
-          colors: ['#0f0', '#f45b5b', '#7798BF', '#aaeeee', '#ff0066', '#eeaaee',
+          colors: ['#ff0', '#f45b5b', '#7798BF', '#aaeeee', '#ff0066', '#eeaaee',
                     '#55BF3B', '#DF5353', '#7798BF', '#aaeeee'],
            chart: {
-             type: 'spline',
              backgroundColor: {
              linearGradient: { x1: 1, y1: 1, x2: 1, y2: 0 },
              stops: [
@@ -29,8 +29,19 @@ export class ReportComponent implements OnInit {
               },
               plotBorderColor: '#606063'
             },
+             labels: {
+                  items: [{
+                      html: 'Total Seats',
+                      style: {
+                          left: '60px',
+                          top: '5px',
+                          color: '#fff',
+                          fontSize:'20px'
+                      }
+                  }]
+              },
             title: {
-                text: 'Seat Availability',
+                text: 'Cafeteria Population',
                 style: {
                         color: '#E0E0E3',
                         textTransform: 'uppercase',
@@ -63,7 +74,7 @@ export class ReportComponent implements OnInit {
                 tickColor: '#707073',
                 tickWidth: 1,
                 title: {
-                  text: 'Number Of Persons',
+                  text: 'Total Persons Inside Cafeteria',
                   style: {
                       color: '#E0E0E3',
                       fontSize: '16px',
@@ -74,9 +85,29 @@ export class ReportComponent implements OnInit {
                 enabled: false
             },
             series: [{
-                name: 'Population in Cafe',
-                data: [5, 13, 24, 37, 22, 18, 13, 7, 4, 2]
-            }],
+              type: 'spline',
+              name: 'Population in Cafe',
+              data: [5, 13, 24, 37, 22, 18, 13, 7, 4, 2]
+            },
+            {
+              type: 'pie',
+              name: 'Total',
+              data: [{
+                  name: 'Seats Occupied',
+                  y: 13,
+                  color:'#b30000', 
+              }, {
+                  name: 'Seats Vacated',
+                  y: 23,
+                  color:'#259C07',
+              }],
+              center: [90, 80],
+              size: 150,
+              showInLegend: false,
+              dataLabels: {
+                  enabled: false
+              }
+          }],
             legend: {
                 itemStyle: {
                   color: '#E0E0E3'
@@ -89,7 +120,7 @@ export class ReportComponent implements OnInit {
                 }
             },
         };
-       // setInterval(() => this.chart.series[0].addPoint(Math.random() * 10), 1000);
+        //setInterval(() => this.chart.series[0].addPoint(Math.random() * 10), 1000);
   }
 
   chart : Object;
@@ -107,5 +138,10 @@ export class ReportComponent implements OnInit {
       }
     );
   }
+ 
+  showTest(){
+    this.router.navigate(['test']);
+  }
+
 
 }

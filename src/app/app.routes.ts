@@ -11,6 +11,10 @@ export const appRoutes : Routes = [
     {
         path : 'test',
         component : TestComponent
+    },
+    {
+        path : 'report',
+        component : ReportComponent
     }
 ]
 
