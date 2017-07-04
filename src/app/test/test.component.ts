@@ -2,24 +2,26 @@ import { Component, OnInit } from '@angular/core';
 import {TestService} from '../test/service/test.service';
 import { Http, Response } from '@angular/http';
 import { ChartModule } from 'angular2-highcharts'; 
-import {Router} from '@angular/router'
+import {Router} from '@angular/router';
+import {DatePipe} from '@angular/common';
 
 @Component({
   selector: 'app-test',
   templateUrl: './test.component.html',
   styleUrls: ['../report/report.component.css'],
-  providers: [TestService]
+  providers: [TestService, DatePipe]
 })
 export class TestComponent implements OnInit {
 
   public chart : Object;
   public options: Object;
   public data= [];
+  public totalArr:Array<Object> = [];
   public enteredArr:Array<Object> = [];
   public exitedArr:Array<Object> = [];
   public timeArr:Array<Object> = [];
 
- constructor(private router : Router, private testService : TestService) { }
+ constructor(private router : Router, private testService : TestService, private datePipe :DatePipe ) { }
 
   saveInstance(chartInstance) {
     this.chart = chartInstance;
@@ -42,20 +44,25 @@ export class TestComponent implements OnInit {
   }
 
   showData(){  
-     this.data.forEach((item,index,arr)=> {
-       this.enteredArr.push(item.entryCount);
-       this.exitedArr.push(item.exitCount);
-       this.timeArr.push(item.eventTime);
+    let totalPerson=0;
+      this.data.forEach((item,index,arr)=> {
+        totalPerson = totalPerson + item.entryCount -item.exitCount;
+        this.totalArr.push(totalPerson);
+        this.enteredArr.push(item.entryCount);
+        this.exitedArr.push(item.exitCount);
+        this.timeArr.push(this.datePipe.transform(item.eventTime,'HH:mm'));
      })
-
-
+    console.log('this.enteredArr',this.enteredArr);
+    console.log('this.exitedArr',this.exitedArr);
+    console.log('this.timeArr',this.timeArr);
+    console.log('this.totalArr',this.totalArr);
     this.loadChart();
   }
 
 
   loadChart(){
     this.options = {
-        colors: ['#b30000', '#259C07'],
+        colors: ['#cccc00'],
 
         chart: {
           type: 'spline',
@@ -63,7 +70,7 @@ export class TestComponent implements OnInit {
           linearGradient: { x1: 0, y1: 1, x2: 1, y2: 0 },
           stops: [
               [0, '#000'],
-              [1, '#002']
+              [1, '#003']
             ]
           },
           style: {
@@ -87,7 +94,7 @@ export class TestComponent implements OnInit {
         },
 
         xAxis: {
-            categories: ['10:00 AM','11:00 AM', '12:00 PM', '01:00 PM', '02:00 PM', '03:00 PM','04:00 PM','05:00 PM','06:00 PM','07:00 PM'],
+            categories:this.timeArr,
             labels: {
               style: {
                   color: '#E0E0E3'
@@ -126,11 +133,8 @@ export class TestComponent implements OnInit {
         },
         
         series: [{
-            name: 'Entered',
-            data: [5, 3, 4, 7, 2, 8, 3, 4, 2, 2]
-        }, {
-            name: 'Exit',
-            data: [2, 2, 0, 2, 1, 2, 1, 5, 0, 3]
+            name: 'Total Persons',
+            data: this.totalArr,
         }],
 
         legend: {

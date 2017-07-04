@@ -20,9 +20,9 @@ import {appRoutes} from './app.routes';
     HttpModule,
     RouterModule.forRoot(appRoutes),
     ChartModule.forRoot(require('highcharts'))
-    
   ],
   providers: [],
   bootstrap: [AppComponent]
+  
 })
 export class AppModule { }
