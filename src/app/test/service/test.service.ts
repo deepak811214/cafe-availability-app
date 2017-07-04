@@ -4,13 +4,12 @@ import { Observable } from 'rxjs/Rx';
 import 'rxjs/add/operator/map';
 
 @Injectable()
-export class ReportService {
+export class TestService {
 
   constructor(private http: Http) { }
 
   getData() : Observable<any>{
-   // const URL = 'http://13.59.165.166/people/event/log';
-    const URL = 'http://13.59.165.166/people/count';
+   const URL = 'http://13.59.165.166/people/event/log';
     return this.http.get(URL).map(
       res => {
         const data = res.json();
