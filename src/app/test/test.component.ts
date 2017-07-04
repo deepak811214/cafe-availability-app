@@ -77,15 +77,18 @@ export class TestComponent implements OnInit {
             webSocket.close();
         }
 
-        //openSocket();
+        openSocket();
     }
 
     writeResponse(data) {
         console.log(data)
+        data = JSON.parse(data);
         for(let i = 0; i< data.length; i++) {
-            this.chart.series[2].addPoint(data[i].exitCount)
-            this.chart.series[1].addPoint(data[i].entryCount)
-            this.chart.series[0].addPoint(this.totalPerson + data[i].entryCount - data[i].exitCount)
+            this.chart.series[2].addPoint([this.datePipe.transform(data[i].eventTime, 'HH:mm'),data[i].exitCount])
+            this.chart.series[1].addPoint([this.datePipe.transform(data[i].eventTime, 'HH:mm'),data[i].entryCount])
+            this.chart.series[0].addPoint([this.datePipe.transform(data[i].eventTime, 'HH:mm'),this.totalPerson + data[i].entryCount - data[i].exitCount])
+        
+
         }
     }
 
