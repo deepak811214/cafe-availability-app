@@ -13,13 +13,14 @@ import { DatePipe } from '@angular/common';
 })
 export class TestComponent implements OnInit {
 
-    public chart: Object;
+    public chart: any;
     public options: Object;
     public data = [];
     public totalArr: Array<Object> = [];
     public enteredArr: Array<Object> = [];
     public exitedArr: Array<Object> = [];
     public timeArr: Array<Object> = [];
+    public totalPerson;
 
     constructor(private router: Router, private testService: TestService, private datePipe: DatePipe) { }
 
@@ -29,6 +30,63 @@ export class TestComponent implements OnInit {
 
     ngOnInit() {
         this.getReport();
+
+        console.log('init')
+        let self = this;
+
+        var webSocket;
+                    
+        function openSocket(){
+        console.log('cLLING ')
+            if(webSocket !== undefined && webSocket.readyState !== WebSocket.CLOSED){
+                //writeResponse("WebSocket is already opened.");
+                return;
+            }
+           
+            // Ensures only one connection is open at a time
+
+            // Create a new instance of the websocket
+            webSocket = new WebSocket("ws://13.59.165.166/");
+                
+            /**
+             * Binds functions to the listeners for the websocket.
+             */
+            webSocket.onopen = function(event){
+                console.log('onOpen')
+                // For reasons I can't determine, onopen gets called twice
+                // and the first time event.data is undefined.
+                // Leave a comment if you know the answer.
+                if(event.data === undefined)
+                    return;
+
+                self.writeResponse(event.data);
+            };
+
+            webSocket.onmessage = function(event){
+                console.log('onmwessagn')
+                self.writeResponse(event.data);
+            };
+
+            webSocket.onclose = function(event){
+                self.writeResponse("Connection closed");
+            };
+        }
+
+        
+        function closeSocket(){
+            webSocket.close();
+        }
+
+        openSocket();
+    }
+
+    writeResponse(data) {
+        console.log(data)
+        for(let i = 0; i< data.length; i++) {
+            this.chart.series[2].addPoint(data[i].exitCount)
+            this.chart.series[1].addPoint(data[i].entryCount)
+            this.chart.series[0].addPoint(this.totalPerson + data[i].entryCount - data[i].exitCount)
+        }
     }
 
     getReport() {
@@ -44,10 +102,10 @@ export class TestComponent implements OnInit {
     }
 
     showData() {
-        let totalPerson = 0;
+        this.totalPerson = 0;
         this.data.forEach((item, index, arr) => {
-            totalPerson = totalPerson + item.entryCount - item.exitCount;
-            this.totalArr.push(totalPerson);
+            this.totalPerson = this.totalPerson + item.entryCount - item.exitCount;
+            this.totalArr.push(this.totalPerson);
             this.enteredArr.push(item.entryCount);
             this.exitedArr.push(item.exitCount);
             this.timeArr.push(this.datePipe.transform(item.eventTime, 'HH:mm'));

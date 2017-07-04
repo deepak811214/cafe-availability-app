@@ -13,7 +13,7 @@ import { Router } from '@angular/router'
 
 export class ReportComponent implements OnInit {
 
-    public chart: Object;
+    public chart: any;
     public options: Object;
     public data = { entryCount: 0, exitCount: 0 };
     public seatAvailable: number = 50;
@@ -24,6 +24,7 @@ export class ReportComponent implements OnInit {
 
     ngOnInit() {
         this.getReport();
+        
     }
 
     saveInstance(chartInstance) {
