@@ -77,7 +77,7 @@ export class TestComponent implements OnInit {
             webSocket.close();
         }
 
-        openSocket();
+        //openSocket();
     }
 
     writeResponse(data) {
@@ -201,15 +201,17 @@ export class TestComponent implements OnInit {
             }],
 
             legend: {
-                itemStyle: {
-                    color: '#E0E0E3'
-                },
-                itemHoverStyle: {
-                    color: '#FFF'
-                },
-                itemHiddenStyle: {
-                    color: '#606063'
-                }
+              itemStyle: {
+                 fontSize:'15px',
+                 font: '15pt Trebuchet MS, Verdana, sans-serif',
+                 color: '#fff'
+              },
+              itemHoverStyle: {
+                 color: '#FFF'
+              },
+              itemHiddenStyle: {
+                 color: '#444'
+              }
             },
         };
     }
