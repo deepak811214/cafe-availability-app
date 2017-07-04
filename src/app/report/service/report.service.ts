@@ -9,7 +9,6 @@ export class ReportService {
   constructor(private http: Http) { }
 
   getData() : Observable<any>{
-   // const URL = 'http://13.59.165.166/people/event/log';
     const URL = 'http://13.59.165.166/people/count';
     return this.http.get(URL).map(
       res => {
